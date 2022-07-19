@@ -8,6 +8,7 @@ typedef struct
 } App;
 
 bool isRunning = true;
+unsigned int lastFrameTicks;
 
 void initSDL(App& app)
 {
@@ -56,6 +57,14 @@ void processInput()
     }
 }
 
+void update()
+{
+    double deltaTime = (SDL_GetTicks() - lastFrameTicks) / 1000.0f;
+    lastFrameTicks = SDL_GetTicks();
+
+    //
+}
+
 void render(SDL_Renderer* renderer)
 {
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
@@ -73,6 +82,7 @@ int main(int argc, char* argv[])
     while (isRunning)
     {
         processInput();
+        update();
         render(app.renderer);
         SDL_Delay(1000 / 60);
     }
