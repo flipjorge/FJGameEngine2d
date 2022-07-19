@@ -56,6 +56,14 @@ void processInput()
     }
 }
 
+void render(SDL_Renderer* renderer)
+{
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    SDL_RenderPresent(renderer);
+}
+
 int main(int argc, char* argv[])
 {
     App app;
@@ -65,7 +73,7 @@ int main(int argc, char* argv[])
     while (isRunning)
     {
         processInput();
-
+        render(app.renderer);
         SDL_Delay(1000 / 60);
     }
 
