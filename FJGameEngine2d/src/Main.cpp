@@ -1,89 +1,19 @@
 #include <iostream>
 #include <SDL.h>
+#include "Engine.h"
 
-typedef struct
-{
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-} App;
-
-bool isRunning = true;
-unsigned int lastFrameTicks;
-
-void initSDL(App& app)
-{
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    {
-        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-        exit(1);
-    }
-
-    app.window = SDL_CreateWindow("FJGameEngine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, 0);
-
-    if (!app.window)
-    {
-        SDL_Log("Unable to create window: %s", SDL_GetError());
-        exit(1);
-    }
-
-    app.renderer = SDL_CreateRenderer(app.window, -1, SDL_RENDERER_ACCELERATED);
-
-    if (!app.renderer)
-    {
-        SDL_Log("Unable to create renderer: %s", SDL_GetError());
-        exit(1);
-    }
-}
-
-void processInput()
-{
-    SDL_Event event;
-
-    while (SDL_PollEvent(&event))
-    {
-        switch (event.type)
-        {
-            case SDL_QUIT:
-                isRunning = false;
-                break;
-            case SDL_KEYDOWN:
-                if (event.key.keysym.sym == SDLK_ESCAPE)
-                {
-                    isRunning = false;
-                }
-            default:
-                break;
-        }
-    }
-}
-
-void update()
-{
-    double deltaTime = (SDL_GetTicks() - lastFrameTicks) / 1000.0f;
-    lastFrameTicks = SDL_GetTicks();
-
-    //
-}
-
-void render(SDL_Renderer* renderer)
-{
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
-
-    SDL_RenderPresent(renderer);
-}
 
 int main(int argc, char* argv[])
 {
-    App app;
+    Engine engine;
     
-    initSDL(app);
+    engine.init();
 
-    while (isRunning)
+    while (engine.getIsRunning())
     {
-        processInput();
-        update();
-        render(app.renderer);
+        engine.processInput();
+        engine.update();
+        engine.render();
         SDL_Delay(1000 / 60);
     }
 
